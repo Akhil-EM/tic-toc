@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Staatliches">
+    <title>Tic Toc </title>
+    <script src="jquery.js"></script>
+    <style>
+        /* Extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: 600px) {
+            
+        }
+     
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: 600px) {
+           
+        }
+
+        /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and (min-width: 768px) {
+           
+        }
+
+        /* Large devices (laptops/desktops, 992px and up) */
+        @media only screen and (min-width: 992px) {
+           
+        }
+
+        /* Extra large devices (large laptops and desktops, 1200px and up) */
+        @media only screen and (min-width: 1200px) {
+            
+        }
+        body{
+            font-family:'Staatliches';
+        }
+        .game-container{
+            text-align: center;
+            align-items: center;
+
+        }
+        .game-pad{
+            margin-top:10%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border-radius:5px;
+           
+            left:0;
+            right:0;
+            background-color:#ffff;
+            margin: auto;
+            padding:25px;
+            width:min-content;
+            display:none;
+        }
+        .game-pad:hover{ 
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+         }
+         .game-pad-inner{
+            border:2px solid rgb(0, 0, 0);
+            width:min-content;
+           
+            
+         }
+         .row{
+             display:flex;
+         }
+         .row input{
+             width:100%;
+             width:100px;
+             height:100px;
+             font-size:80px;
+             font-weight:bold;
+             text-align:center;
+             caret-color: transparent;
+             color: rgb(43, 43, 43);
+             -webkit-user-select: none;  
+             -moz-user-select: none;    
+             -ms-user-select: none;      
+             user-select: none;
+         }
+         .row input:hover{
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+         }
+         #error{
+            color:#FF5733;
+            display:none;
+         }
+         .turn-indicators{
+             display:flex;
+             justify-content: space-between;
+             
+             text-align:center;
+         }
+         .turn-indicators h3{
+             color:rgb(43, 46, 236);
+         }
+         .turn-indicators span{
+             color:rgb(0, 235, 0);
+             font-size:2px;
+             line-height:0;
+             margin:0;
+             padding:0;
+         }
+         .starter{
+             color: darkorchid;
+             line-height:0;
+         }
+         .starter span{
+             color: rgb(197, 163, 10);
+             font-weight:bold;
+             font-size:25px;
+             
+             
+         }
+         
+    </style>
+   
+
+</head>
+<body>
+    <!-- here the game contains -->
+   <div class="game-container">
+         <h1>Let's Tic Toc</h1>
+         <br>
+           
+          <h3 class="starter">Let's start in...&nbsp;<span class="time" id="time">3</span></h3>        
+
+            <div class="game-pad">
+                <P>( only capital x and o is allowd.<br> player one X .player two O )</P>
+                <p></p>
+                <div class="turn-indicators">
+                    <h3 id="playerX">player X</h3> 
+                    <h3 id="playerO">player O</h3>
+                </div>
+                <div class="game-pad-inner">
+                    <div class="row">
+                        <input type="text"   maxlength="1" id="one" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="two" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="three" onclick="changeText(this)">
+                    </div>
+                    <div class="row">
+                        <input type="text"   maxlength="1" id="four" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="five" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="six" onclick="changeText(this)">
+                    </div>
+                    <div class="row">
+                        <input type="text"   maxlength="1" id="seven" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="eight" onclick="changeText(this)">
+                        <input type="text"   maxlength="1" id="nine" onclick="changeText(this)">
+                    </div>
+                </div>
+            </div>
+         
+   </div>
+</body>
+<script>
+      var firstCheck=false;
+      
+      $('#playerX').css('color','rgb(11, 243, 11)')
+       
+
+
+
+        function startGame(){
+            var timeleft =3;
+            var downloadTimer = setInterval(function(){
+            if(timeleft == 0){
+                clearInterval(downloadTimer);
+                $('.starter').fadeOut();
+                $('.game-pad').fadeIn();
+            }
+         
+            $("#time").html(timeleft);
+           
+            timeleft -=1;
+            }, 1000);  
+        }
+
+
+   
+       
+    
+     startGame();
+      
+    function changeText(item){
+        if(firstCheck==false){
+            item.value="X"
+            item.disabled=true;
+            $('#playerX').css('color','rgb(11, 243, 11)');
+            $('#playerO').css('color','rgb(43, 46, 236)');
+            checkWinner();
+            firstCheck=true;
+            return;
+        }
+        if(firstCheck==true){
+            item.value="O"
+            item.disabled=true;
+            $('#playerO').css('color','rgb(11, 243, 11)');
+            $('#playerX').css('color','rgb(43, 46, 236)');
+            checkWinner();
+            firstCheck=false;
+            return;
+        }
+    }
+    function WinnerIs(win) {
+        
+        alert(win+" is winner");
+        location.reload();
+    }
+     
+    function checkWinner() {
+          var one,two,three,four,five,six,seven,eight,nine;
+
+          one=$('#one').val();
+          two=$('#two').val();
+          three=$('#three').val();
+          four=$('#four').val();
+          five=$('#five').val();
+          six=$('#six').val();
+          seven=$('#seven').val();
+          eight=$('#eight').val();
+          nine=$('#nine').val();
+        //  console.log( one,two,three,four,five,six,seven,eight,nine);
+         
+        // check first row
+         if(one=='X' && two=='X' && three=='X'){
+            WinnerIs('X');
+         }
+         if(one=='O' && two=='O' && three=='O'){
+            WinnerIs('O');
+         }
+
+        //  // check second row
+         if(four=='X' && five=='X' && six=='X'){
+            WinnerIs('X');
+         }
+         if(four=='O' && five=='O' && six=='O'){
+            WinnerIs('O');
+         }
+         // check third row
+         if(seven=='X' && eight=='X' && nine=='X'){
+            WinnerIs('X');
+         }
+         if(seven=='O' && eight=='O' && nine=='O'){
+            WinnerIs('O');
+         }
+
+
+        //  check horizontal first
+         if(one=='X' && four=='X' && seven=='X'){
+            WinnerIs('X');
+         }
+         if(one=='O' && four=='O' && seven=='O'){
+            WinnerIs('O');
+         }
+
+
+         //check horizontal second
+         if(two=='X' && five=='X' && eight=='X'){
+            WinnerIs('X');
+         }
+         if(two=='O' && five=='O' && eight=='O'){
+            WinnerIs('O');
+         }
+
+         //ckeck horizontal third
+         if(three=='X' && six=='X' && nine=='X'){
+            WinnerIs('X');
+         }
+         if(three=='O' && six=='O' && nine=='O'){
+            WinnerIs('O');
+         }
+
+        // check diagonaly
+        if(one=='X' && five=='X' && nine=='X'){
+            WinnerIs('X');
+         }
+         if(one=='O' && five=='O' && nine=='O'){
+            WinnerIs('O');
+         }
+
+         if(three=='X' && five=='X' && seven=='X'){
+            WinnerIs('X');
+         }
+         if(three=='O' && five=='O' && seven=='O'){
+            WinnerIs('O');
+         }
+    }
+    
+    
+  
+
+</script>
+</html>
